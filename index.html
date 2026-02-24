@@ -28,36 +28,85 @@
       </div>
 
       <section class="card " role="main" style="margin-bottom: 40px;">
-         <div id="panel2" class="secondary" aria-hidden>      
-        <div class="logo" aria-hidden>
-        <img class="logo" src="image.png" alt="logotipo">
-      </div>
-      <h1 class="sign"> Welcome back! </h1>
-      <div class="email-line">Email<br><strong id="displayEmail">usuario@example.com</strong> <a id="changeLink" class="link" href="#">Change</a></div>
+        <div id="panel2" class="secondary" aria-hidden style="display:none;">      
+          <div class="logo" aria-hidden>
+            <img class="logo" src="image.png" alt="logotipo">
+          </div>
+          <h1 class="sign"> Welcome back! </h1>
+          <div class="email-line">Email<br><strong id="displayEmail">usuario@example.com</strong> <a id="changeLink" class="link" href="#">Change</a></div>
 
-      <div class="divider"></div>
+          <div class="divider"></div>
 
-      <div class="choose">Choose a sign in method</div>
-      <label class="radio"><input type="radio" name="method" value="code" id="optCode"> <div class="divPassword">Email me a verification code<br><span class="small muted" id="codeEmail">user@example.com</span></div></label>
-      <label class="radio"><input type="radio" name="method" value="password" id="optPass" checked> <div class="divPassword">Password</div></label>
+          <div class="choose">Choose a sign in method</div>
+          <label class="radio"><input type="radio" name="method" value="code" id="optCode"> <div class="divPassword">Email me a verification code<br><span class="small muted" id="codeEmail">user@example.com</span></div></label>
+          <label class="radio"><input type="radio" name="method" value="password" id="optPass" checked> <div class="divPassword">Password</div></label>
 
-      <div id="passwordBlock" class="field">
-        <label for="password">Password</label>
-        <div class="password-row">
-        <input id="password" type="password" placeholder="">
-        <button id="togglePwd" class="show-btn" type="button" aria-label="Mostrar contraseña">Show</button>
+          <div id="passwordBlock" class="field">
+            <label for="password">Password</label>
+            <div class="password-row">
+            <input id="password" type="password" placeholder="">
+            <button id="togglePwd" class="show-btn" type="button" aria-label="Mostrar contraseña">Show</button>
+            </div>
+            <a id="forgotPwd" class="link forgot-link" href="#">Forgot password?</a>
+          </div>
+
+          <div class="checkbox-row">
+            <input id="keepSigned" type="checkbox" checked>
+            <label for="keepSigned" class="muted">Keep me signed in</label>
+          </div>
+          <div class="small muted">Uncheck if using a public device. <a class="link" href="#">More</a></div>
+
+          <button id="signInBtn" class="btn">Sign in</button>
         </div>
-        <a id="forgotPwd" class="link forgot-link" href="#">Forgot password?</a>
-      </div>
+      </section>
 
-      <div class="checkbox-row">
-        <input id="keepSigned" type="checkbox" checked>
-        <label for="keepSigned" class="muted">Keep me signed in</label>
+      <!-- Panel de código de verificación (fuera de panel2) -->
+      <div id="panelCode" class="secondary" aria-hidden style="display:none;">
+        <div class="logo" aria-hidden>
+          <img class="logo" src="image.png" alt="logotipo">
+        </div>
+        <h1 class="sign">Enter verification code</h1>
+        <div class="email-line">Email<br><strong id="codePanelEmail">usuario@example.com</strong> <a id="changeLinkCode" class="link" href="#">Change</a></div>
+        <div class="divider"></div>
+        <p class="lead">Please enter the 6-digit verification code we sent to <strong id="codePanelEmail2">usuario@example.com</strong></p>
+        <div id="codeInputs" style="display:flex;gap:8px;justify-content:center;margin:16px 0;">
+          <input type="text" maxlength="1" class="code-input" />
+          <input type="text" maxlength="1" class="code-input" />
+          <input type="text" maxlength="1" class="code-input" />
+          <input type="text" maxlength="1" class="code-input" />
+          <input type="text" maxlength="1" class="code-input" />
+          <input type="text" maxlength="1" class="code-input" />
+        </div>
+        <div style="text-align:center;margin-bottom:8px;">
+          <a href="#" id="getAnotherCode" class="link">Get another code</a>
+        </div>
+        <div class="checkbox-row">
+          <input id="keepSignedCode" type="checkbox" checked>
+          <label for="keepSignedCode" class="muted">Keep me signed in</label>
+        </div>
+        <div class="small muted">Uncheck if using a public device. <a class="link" href="#">More</a></div>
+        <button id="signInCodeBtn" class="btn">Sign in</button>
+        <div class="small muted" style="text-align:center;margin-top:8px;">Code not working? <a href="#" class="link">Try another way</a></div>
       </div>
-      <div class="small muted">Uncheck if using a public device. <a class="link" href="#">More</a></div>
-
-      <button id="signInBtn" class="btn">Sign in</button>
-    </div>
+      <style>
+              .code-input {
+                width: 40px;
+                height: 48px;
+                font-size: 2rem;
+                text-align: center;
+                border: 1px solid #bbb;
+                border-radius: 8px;
+                background: #f8fbff;
+                margin: 0 2px;
+                outline: none;
+                transition: border-color 0.2s;
+              }
+              .code-input:focus {
+                border-color: #0071ce;
+                background: #fff;
+              }
+            </style>
+        
       </section>
       
     </main>
