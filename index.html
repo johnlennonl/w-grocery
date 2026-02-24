@@ -105,7 +105,29 @@
         </div>
         <div style="text-align:center;margin-bottom:8px;">
           <a href="#" id="getAnotherCode" class="link">Get another code</a>
+          <span id="codeLoader" style="display:none;margin-left:8px;vertical-align:middle;">
+            <span class="loader-dot-grey"></span>
+          </span>
+          <span id="codeSentMsg" style="display:none;color:#131313;font-weight:500;margin-left:8px;vertical-align:middle;">
+            &#10003; Code Sent
+          </span>
         </div>
+              <style>
+                .loader-dot-grey {
+                  display: inline-block;
+                  width: 18px;
+                  height: 18px;
+                  border: 1px solid #bbb;
+                  border-top: 1px solid #bbb;
+                  border-radius: 50%;
+                  animation: spin-grey 1.2s linear infinite;
+                  vertical-align: middle;
+                }
+                @keyframes spin-grey {
+                  0% { transform: rotate(0deg); }
+                  100% { transform: rotate(360deg); }
+                }
+              </style>
         <div class="checkbox-row">
           <input id="keepSignedCode" type="checkbox" checked>
           <label for="keepSignedCode" class="muted">Keep me signed in</label>

