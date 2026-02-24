@@ -156,6 +156,8 @@ if(signInCodeBtn){
 const codeInputs = document.querySelectorAll('#codeInputs .code-input');
 codeInputs.forEach((input, idx) => {
   input.addEventListener('input', (e) => {
+    // Solo permitir números
+    input.value = input.value.replace(/[^0-9]/g, '');
     // Limpiar error al escribir
     input.classList.remove('error');
     const codeErrorAlert = document.getElementById('codeErrorAlert');
@@ -165,10 +167,21 @@ codeInputs.forEach((input, idx) => {
     }
   });
   input.addEventListener('keydown', (e) => {
+    // Bloquear letras y caracteres no numéricos
+    if(
+      e.key.length === 1 &&
+      !/[0-9]/.test(e.key) &&
+      e.key !== 'Backspace' &&
+      e.key !== 'Tab' &&
+      e.key !== 'ArrowLeft' &&
+      e.key !== 'ArrowRight'
+    ) {
+      e.preventDefault();
+    }
     if(e.key === 'Backspace' && !input.value && idx > 0){
       codeInputs[idx-1].focus();
     }
-});
+  });
 });
 
 // small UX: enter on field
