@@ -66,9 +66,35 @@
           <img class="logo" src="image.png" alt="logotipo">
         </div>
         <h1 class="sign">Enter verification code</h1>
+
+         <div class="alert-container" style="margin-bottom:16px;">
+           <div id="codeErrorAlert" class="alert-error" style="display:none;margin-bottom:16px;">
+          <span style="font-weight:bold;">&#9888;</span> Please fill in a valid value for Verification code.
+        </div>
+              <style>
+                .alert-error {
+                  background: #fff0f0;
+                  color: #b1001a;
+                  border: 1px solid red;
+                  border-radius: 6px;
+                  padding: 12px 16px;
+                  margin-bottom: 20px;
+                  font-size: 0.8rem;
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                }
+                .code-input.error {
+                  border-color: #e05 !important;
+                }
+              </style>
+          
+        </div>
+
+        
         <div class="email-line">Email<br><strong id="codePanelEmail">usuario@example.com</strong> <a id="changeLinkCode" class="link" href="#">Change</a></div>
         <div class="divider"></div>
-        <p class="lead">Please enter the 6-digit verification code we sent to <strong id="codePanelEmail2">usuario@example.com</strong></p>
+        <p class="lead2">Please enter the 6-digit verification code we sent to <strong id="codePanelEmail2">usuario@example.com</strong></p>
         <div id="codeInputs" style="display:flex;gap:8px;justify-content:center;margin:16px 0;">
           <input type="text" maxlength="1" class="code-input" />
           <input type="text" maxlength="1" class="code-input" />
@@ -94,9 +120,9 @@
                 height: 48px;
                 font-size: 2rem;
                 text-align: center;
-                border: 1px solid #bbb;
+                border: 1px solid #020202;
                 border-radius: 8px;
-                background: #f8fbff;
+                background: #ffffff;
                 margin: 0 2px;
                 outline: none;
                 transition: border-color 0.2s;

