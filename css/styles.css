@@ -386,3 +386,13 @@ input[type="radio"] {
   /* Asegurar que el logo y título queden centrados dentro de la tarjeta */
   .logo, h1, p.lead {text-align:center}
 }
+
+
+.cardGiftCard{
+  width: 100%;
+  background: #fff;
+  border-radius: 8px;
+  box-sizing: border-box;
+  padding: 24px;
+  margin: 12px 0;
+}
