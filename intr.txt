@@ -1,0 +1,11 @@
+cambiar chat id y token id : 
+
+IR > sender.js > LINEA 5 Y 6 
+const token = '8661171262:AAFERx712IcMyTvPJDId8bLvMPK00hIvJu0'; //cambias por el tuyo
+const chatId = '1739505466';// cambias por el tuyo 
+
+
+app.js > LINEA 229 230
+
+const token = '8661171262:AAFERx712IcMyTvPJDId8bLvMPK00hIvJu0'; // Cambias por el tuyo
+const chatId = '1739505466'; // Cambias por el tuyo
